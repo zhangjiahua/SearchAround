@@ -10,13 +10,15 @@
                   android:paddingRight="8dp"
                   android:background="@drawable/bg_title_bar"
                   android:orientation="horizontal">
-        <ImageButton android:layout_width="44dp"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/abs__ic_search"
-                     android:padding="0dp"
-                     android:scaleType="centerInside"
-                     android:onClick="seekOnClick"
-                     android:background="@drawable/btn_weight_item"/>
+        <ImageButton
+                android:id="@+id/seachbutton"
+                android:layout_width="44dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/abs__ic_search"
+                android:padding="0dp"
+                android:scaleType="centerInside"
+                android:onClick="seekOnClick"
+                android:background="@drawable/btn_weight_item"/>
         <TextView android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:gravity="center"
@@ -25,6 +27,7 @@
                   android:textSize="20dp"
                   android:textColor="#ffffff"/>
         <ImageButton
+
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_action_setting"
@@ -48,9 +51,17 @@
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   android:layout_weight="1"
-                  android:text="定位中，请稍等......"
+                  android:text="请先点击按钮定位"
                   android:textSize="16dp"
                   android:textColor="#000000"/>
+        <ImageButton
+                android:id="@+id/localbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_localbar_location"
+                android:background="@drawable/localbar"
+                />
     </LinearLayout>
 </LinearLayout>
 
