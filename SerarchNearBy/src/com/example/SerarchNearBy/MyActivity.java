@@ -14,9 +14,6 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +31,7 @@ public class MyActivity extends Activity {
     private ImageButton settingImageButton;
     private ImageButton localbar;
     private LocationClientOption option;
+    private ImageButton seachbutton;
     public static String[] strings = new String[]{"餐饮服务", "购物服务", "生活服务", "体育休闲服务", "医疗保健服务", "住宿服务", "科教文化服务", "交通设施服务", "公共设施服务"};
 
     public void onCreate(Bundle savedInstanceState) {
@@ -93,6 +91,18 @@ public class MyActivity extends Activity {
         //  locationOnclick(bottomTextView);
 
         getLocationAsyncTask();
+
+        //搜索按钮
+        seachbutton = (ImageButton) findViewById(R.id.seachbutton);
+        seachbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MyActivity.this, SerchActivity.class);
+                intent.putExtra("currentLocation",currentLocation);
+                intent.putExtra("Location",bottomTextView.getText()); //提供获得本地位置信息(传递到searchActivity)
+                startActivity(intent);
+            }
+        });
     }
     public void getLocationAsyncTask() {
         option = new LocationClientOption();

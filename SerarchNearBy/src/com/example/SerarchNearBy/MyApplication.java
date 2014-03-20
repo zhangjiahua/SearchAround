@@ -21,7 +21,7 @@ public class MyApplication extends Application {
     private static MyApplication mInstance = null;
     public boolean m_bKeyRight = true;
     public BMapManager mBMapManager = null;
-    public static final String strKey = "1LQbMV6UkrXYMoqQiAx1f0eK";
+    public static final String strKey = "mnKKgYBl2ShUR0eGLt28y2eQ";
 
 
     public void onCreate() {
