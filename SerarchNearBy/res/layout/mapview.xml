@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_title_bar"
+
+            >
+        <ImageButton android:id="@+id/seting_back"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:src="@drawable/ic_nav_back"
+                     android:background="@drawable/back"
+                     android:layout_centerVertical="true"
+                />
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_centerInParent="true"
+                  android:padding="5dp"
+                  android:text="详细信息"
+                  android:textColor="#FFFFFf"
+                  android:textSize="18dp"
+                />
+        <ImageButton android:id="@+id/btroot"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_alignParentRight="true"
+                     android:background="@drawable/serch_bt"
+                     android:src="@drawable/ic_action_route"
+                />
+    </RelativeLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:background="#FFFFFF"
+            >
+        <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="#ff777777"
+                >
+            <ImageButton android:id="@+id/btpeople"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:src="@drawable/ic_byfoot"
+                         android:background="@android:color/transparent"
+                         />
+            <TextView android:id="@+id/textviewbyfoot"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_toRightOf="@+id/btpeople"
+                      android:layout_centerVertical="true"
+                      android:layout_marginLeft="15dp"
+                      android:text="步行"
+                      android:textSize="13dp"
+                      android:textColor="#000000"
+                    />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        >
+
+            <TextView android:id="@+id/textviewbus"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:text="公交"
+                      android:textSize="13dp"
+                      android:gravity="center"
+                      android:textColor="#000000"
+                    />
+
+        </RelativeLayout>
+        <RelativeLayout android:id="@+id/rlcar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                >
+            <ImageButton android:id="@+id/btcar"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:src="@drawable/ic_bycar"
+                         android:background="@android:color/transparent"
+
+                    />
+            <TextView android:id="@+id/textviewbycar"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_toRightOf="@+id/btcar"
+                      android:layout_centerVertical="true"
+                      android:layout_marginLeft="15dp"
+                      android:text="驾车"
+                      android:textColor="#000000"
+                      android:textSize="13dp"
+                    >
+
+            </TextView>
+
+        </RelativeLayout>
+       </LinearLayout>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+            >
+        <com.baidu.mapapi.map.MapView android:id="@+id/bmapsView"
+                                      android:layout_width="fill_parent"
+                                      android:layout_height="280dp"
+                                      android:clickable="true"/>
+        <TextView android:id="@+id/textviewrootMessage"
+                  android:layout_width="match_parent"
+                  android:layout_height="25dp"
+                  android:background="#88ffffff"
+                  android:gravity="center_vertical"
+                  android:textColor="#ffcdcdcd"
+                  android:textSize="13dp"
+                  android:text="全程约"
+                  android:paddingLeft="15dp"
+                  android:layout_alignParentTop="true"
+                />
+        <LinearLayout android:id="@+id/ll_phone"
+                      android:layout_width="match_parent"
+                      android:layout_height="65dp"
+                      android:orientation="vertical"
+                      android:gravity="center"
+                      android:layout_below="@+id/bmapsView"
+                      android:background="#88ffffff"
+                >
+            <TextView android:id="@+id/textviewaddressname"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:background="@android:color/transparent"
+                      android:textSize="13dp"
+                      android:textColor="#fff4f4f4"
+                      android:text="adressname"
+                      android:paddingLeft="15dp"
+
+                    />
+            <TextView android:id="@+id/textviewaddressmessage"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:background="@android:color/transparent"
+                      android:textSize="10dp"
+                      android:textColor="#fff4f4f4"
+                      android:text="address"
+                      android:paddingLeft="15dp"
+
+                    />
+        </LinearLayout>
+
+    </RelativeLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="0dp"
+                  android:orientation="horizontal"
+                  android:layout_weight="1"
+                  android:gravity="center"
+                  android:background="#ffffff"
+            >
+        <ImageButton android:id="@+id/btphone"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:src="@drawable/ic_phone"
+                     android:background="@android:color/transparent"
+                />
+        <TextView android:id="@+id/textviewphone"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:textColor="#ff000201"
+                  android:text="暂无电话"
+                  android:textSize="13dp"
+                  android:paddingLeft="5dp"
+                  android:background="@android:color/transparent"
+                />
+    </LinearLayout>
+
+</LinearLayout>
