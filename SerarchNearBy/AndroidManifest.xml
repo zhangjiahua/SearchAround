@@ -5,39 +5,42 @@
           android:versionName="1.0">
     <uses-sdk android:minSdkVersion="4"/>
     <application android:label="@string/app_name"
-                 android:icon="@drawable/ic_launcher">
+                 android:icon="@drawable/ic_launcher"
+                 android:name="com.example.SerarchNearBy.MyApplication">
         <activity android:name=".MyActivity"
                   android:label="搜周边">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            </activity>
-            <activity android:name=".SecondActivity">
-                <intent-filter>
-                    <action android:name="com.cdm.action.intenttest"/>
-                    <category android:name="android.intent.category.DEFAULT"/>
-                </intent-filter>
-            </activity>
-            <activity android:name=".SettingActivity">
-                <intent-filter>
-                    <action android:name="com.cdm.action.intenttest"/>
-                    <category android:name="android.intent.category.DEFAULT"/>
-                </intent-filter>
-            </activity>
+        </activity>
+        <activity android:name=".view.MapActivity"/>
+        <activity android:name=".SecondActivity">
+            <intent-filter>
+                <action android:name="com.example.action.intenttest"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".SettingActivity">
+            <intent-filter>
+                <action android:name="com.example.action.intenttest"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
 
-            <activity android:name=".ThirdActivity">
-                <intent-filter>
-                    <action android:name="com.cdm.action.intenttest"/>
-                    <category android:name="android.intent.category.DEFAULT"/>
-                </intent-filter>
-            </activity>
-            <activity android:name=".SerchActivity">
-                <intent-filter>
-                    <action android:name="com.cdm.action.intenttest"/>
-                    <category android:name="android.intent.category.DEFAULT"/>
-                </intent-filter>
-            </activity>
+        <activity android:name=".ThirdActivity">
+            <intent-filter>
+                <action android:name="com.example.action.intenttest"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".SerchActivity">
+            <intent-filter>
+                <action android:name="com.example.action.intenttest"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <service
                 android:name="com.baidu.location.f"
                 android:enabled="true"
