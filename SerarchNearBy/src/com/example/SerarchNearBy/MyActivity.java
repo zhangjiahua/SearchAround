@@ -48,7 +48,6 @@ public class MyActivity extends Activity {
         //点击按钮定位
         localbar = (ImageButton) findViewById(R.id.localbar);
         localbar.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
                 bottomTextView.setText("正在定位请稍等......");
                 requestLocation();
@@ -76,7 +75,7 @@ public class MyActivity extends Activity {
                 textView.setText(title);
                 textView.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        //itemClick(index,title);
+                        itemClick(index,title);
                     }
                 });
                 secondutton.setOnClickListener(new View.OnClickListener() {
@@ -88,14 +87,9 @@ public class MyActivity extends Activity {
             }
         };
         indexListView.setAdapter(listViewAdapter);
-        //  locationOnclick(bottomTextView);
-
         getLocationAsyncTask();
-
-        //搜索按钮
         seachbutton = (ImageButton) findViewById(R.id.seachbutton);
         seachbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MyActivity.this, SerchActivity.class);
                 intent.putExtra("currentLocation",currentLocation);
@@ -124,6 +118,10 @@ public class MyActivity extends Activity {
                             locationClient.stop();
                             bottomTextView.setText(bdLocation.getAddrStr());
                             currentLocation = bdLocation;
+                            lng = bdLocation.getLongitude();
+                            lat = bdLocation.getLatitude();
+                            MyApplication.locData.latitude = lat;
+                            MyApplication.locData.longitude = lng;
                         }
                     }
                     @Override
@@ -137,20 +135,22 @@ public class MyActivity extends Activity {
         };
         asyncTask.execute();
     }
-    //打开定位
     private void requestLocation() {
         if (!locationClient.isStarted()) {
             locationClient.start();//打开定位
         }
         locationClient.requestLocation();
     }
-
-    @Override
     protected void onResume() {
         initData();
         super.onResume();
     }
-
+    private void itemClick(int position,String title) {
+        Intent intent = new Intent(this,ListActivity.class);
+        intent.putExtra(SecondActivity.dataIndex,position);
+        intent.putExtra(SecondActivity.dataText,title);
+        startActivity(intent);
+    }
     private void initData() {
         dataList.clear();
         for (int i = 0; i < strings.length; i++) {
@@ -161,14 +161,12 @@ public class MyActivity extends Activity {
         }
         listViewAdapter.notifyDataSetChanged();
     }
-
     private void gotoNextView(int index, String title) {
         Intent intent = new Intent(MyActivity.this, SecondActivity.class);
         intent.putExtra(SecondActivity.dataIndex, index);
         intent.putExtra(SecondActivity.dataText, title);
         startActivity(intent);
     }
-
 
 }
 

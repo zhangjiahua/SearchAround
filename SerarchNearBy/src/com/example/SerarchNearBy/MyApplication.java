@@ -46,7 +46,7 @@ public class MyApplication extends Application {
 
 
     // 常用事件监听，用来处理通常的网络错误，授权验证错误等
-    static class MyGeneralListener implements MKGeneralListener {
+    public static class MyGeneralListener implements MKGeneralListener {
 
         @Override
         public void onGetNetworkState(int iError) {

@@ -64,7 +64,7 @@ public class SecondActivity extends Activity {
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //itemClick(index,title);
+                        itemClick(index,title);
                     }
                 });
 
@@ -83,12 +83,12 @@ public class SecondActivity extends Activity {
         initData();
     }
 
-//    private void itemClick(int position,String title) {
-//        Intent intent = new Intent(this,ListActivity.class);
-//        intent.putExtra(SecondActivity.dataIndex,position);
-//        intent.putExtra(SecondActivity.dataText,title);
-//        startActivity(intent);
-//    }
+    private void itemClick(int position,String title) {
+        Intent intent = new Intent(this,ListActivity.class);
+        intent.putExtra(SecondActivity.dataIndex,position);
+        intent.putExtra(SecondActivity.dataText,title);
+        startActivity(intent);
+    }
 
         private void gotoNextView(int index,String title) {
             Intent intent = new Intent(SecondActivity.this,ThirdActivity.class);
