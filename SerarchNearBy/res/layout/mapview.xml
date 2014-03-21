@@ -32,98 +32,78 @@
                      android:src="@drawable/ic_action_route"
                 />
     </RelativeLayout>
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:background="#FFFFFF"
+    <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:background="#ffffffff"
             >
-        <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="#ff777777"
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center"
+
                 >
-            <ImageButton android:id="@+id/btpeople"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:src="@drawable/ic_byfoot"
-                         android:background="@android:color/transparent"
-                         />
-            <TextView android:id="@+id/textviewbyfoot"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_toRightOf="@+id/btpeople"
-                      android:layout_centerVertical="true"
-                      android:layout_marginLeft="15dp"
-                      android:text="步行"
-                      android:textSize="13dp"
-                      android:textColor="#000000"
+
+            <Button
+                    android:id="@+id/btfoot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:text="步行"
+                    android:textSize="13dp"
+                    android:drawableLeft="@drawable/ic_byfoot"
+                    android:textColor="#ff000201"
+                    android:background="@drawable/bg_tab_top"
                     />
 
-        </RelativeLayout>
-
-        <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        >
-
-            <TextView android:id="@+id/textviewbus"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:text="公交"
-                      android:textSize="13dp"
-                      android:gravity="center"
-                      android:textColor="#000000"
+            <Button
+                    android:id="@+id/btbus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:text="公交"
+                    android:textSize="13dp"
+                    android:textColor="#ff000201"
+                    android:background="#fff4f4f4"
                     />
 
-        </RelativeLayout>
-        <RelativeLayout android:id="@+id/rlcar"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                >
-            <ImageButton android:id="@+id/btcar"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:src="@drawable/ic_bycar"
-                         android:background="@android:color/transparent"
-
+            <Button
+                    android:id="@+id/btcar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:text="驾车"
+                    android:textSize="13dp"
+                    android:drawableLeft="@drawable/ic_bycar"
+                    android:textColor="#ff000201"
+                    android:background="#fff4f4f4"
                     />
-            <TextView android:id="@+id/textviewbycar"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:layout_toRightOf="@+id/btcar"
-                      android:layout_centerVertical="true"
-                      android:layout_marginLeft="15dp"
-                      android:text="驾车"
-                      android:textColor="#000000"
-                      android:textSize="13dp"
-                    >
+        </LinearLayout>
+    </RelativeLayout>
 
-            </TextView>
-
-        </RelativeLayout>
-       </LinearLayout>
     <RelativeLayout android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:gravity="center"
+                    android:layout_weight="10"
             >
-        <com.baidu.mapapi.map.MapView android:id="@+id/bmapsView"
-                                      android:layout_width="fill_parent"
-                                      android:layout_height="280dp"
-                                      android:clickable="true"/>
+        <com.baidu.mapapi.map.MapView
+                android:id="@+id/bmapsView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                />
+
         <TextView android:id="@+id/textviewrootMessage"
                   android:layout_width="match_parent"
                   android:layout_height="25dp"
-                  android:background="#88ffffff"
+                  android:background="#7f000000"
                   android:gravity="center_vertical"
-                  android:textColor="#ffcdcdcd"
+                  android:textColor="#ff4ce108"
                   android:textSize="13dp"
                   android:text="全程约"
-                  android:paddingLeft="15dp"
+                  android:paddingLeft="10dp"
                   android:layout_alignParentTop="true"
                 />
         <LinearLayout android:id="@+id/ll_phone"
@@ -131,27 +111,27 @@
                       android:layout_height="65dp"
                       android:orientation="vertical"
                       android:gravity="center"
-                      android:layout_below="@+id/bmapsView"
-                      android:background="#88ffffff"
+                      android:layout_alignParentBottom="true"
+                      android:background="#7f000000"
                 >
             <TextView android:id="@+id/textviewaddressname"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:background="@android:color/transparent"
+
                       android:textSize="13dp"
-                      android:textColor="#fff4f4f4"
+                      android:textColor="#ff4ce108"
                       android:text="adressname"
-                      android:paddingLeft="15dp"
+                      android:paddingLeft="8dp"
 
                     />
             <TextView android:id="@+id/textviewaddressmessage"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:background="@android:color/transparent"
-                      android:textSize="10dp"
-                      android:textColor="#fff4f4f4"
+
+                      android:textSize="12dp"
+                      android:textColor="#ff4ce108"
                       android:text="address"
-                      android:paddingLeft="15dp"
+                      android:paddingLeft="8dp"
 
                     />
         </LinearLayout>
@@ -174,7 +154,6 @@
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:textColor="#ff000201"
-                  android:text="暂无电话"
                   android:textSize="13dp"
                   android:paddingLeft="5dp"
                   android:background="@android:color/transparent"
