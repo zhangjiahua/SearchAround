@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ic_localbar_location"
-                android:background="@drawable/localbar"
+                android:background="@drawable/ic_localbar_location"
                 />
     </LinearLayout>
 </LinearLayout>

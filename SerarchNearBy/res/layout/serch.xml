@@ -13,7 +13,7 @@
                      android:layout_width="wrap_content"
                      android:layout_height="match_parent"
                      android:src="@drawable/ic_nav_back"
-                     android:background="@drawable/back"
+                     android:background="@drawable/ic_nav_back"
                      android:layout_weight="0.1"
                 />
         <EditText android:id="@+id/condition"
@@ -32,11 +32,11 @@
                      android:layout_height="wrap_content"
                      android:layout_gravity="center"
                      android:layout_weight="0.1"
-                     android:background="@drawable/serch_bt"
+                     android:background="@drawable/abs__ic_search"
                      android:src="@drawable/abs__ic_search"
                 />
     </LinearLayout>
-    <com.example.SerarchNearBy.view.CustomListView
+    <com.example.SerarchNearBy.CustomListView
             android:id="@+id/result"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
