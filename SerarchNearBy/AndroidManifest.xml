@@ -14,16 +14,39 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".view.MapActivity"/>
+
+
         <activity android:name=".SecondActivity">
         </activity>
-        <activity android:name=".SettingActivity">
+
+    <activity android:name=".SettingActivity">
         </activity>
 
-        <activity android:name=".ThirdActivity">
+
+    <activity android:name=".ThirdActivity">
         </activity>
 
-        <activity android:name=".SerchActivity">
+
+    <activity android:name=".SerchActivity">
+        </activity>
+
+    <activity android:name=".ListActivity">
+        </activity>
+
+         <activity android:name=".MapListActivity">
+        </activity>
+
+        <activity android:name=".JumpActivity">
+        </activity>
+
+        <activity android:name=".SecondListActivity">
+        </activity>
+
+        <activity android:name=".BaiduMpActivity">
+        </activity>
+
+        <activity android:name=".MapActivity">
+
         </activity>
         <service
                 android:name="com.baidu.location.f"
