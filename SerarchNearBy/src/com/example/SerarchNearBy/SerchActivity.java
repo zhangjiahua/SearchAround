@@ -122,15 +122,16 @@ public class SerchActivity extends Activity {
                 Log.e(TAG, "click position:" + position);
                 Log.e(TAG,view+"");
 
-                Double x=locatondatas.get(position).get("longitude");
-                Double y=locatondatas.get(position).get("latitude");
+                Double x=locatondatas.get(position-1).get("longitude");
+                Double y=locatondatas.get(position-1).get("latitude");
                 Intent intent = new Intent(SerchActivity.this, MapActivity.class);
                 intent.putExtra("currentLocation",currentLocation);
                 intent.putExtra("longitude",x);
                 intent.putExtra("latitude",y);
-                intent.putExtra("addressname",datas.get(position).get("name"));
-                intent.putExtra("address",datas.get(position).get("address"));
-                intent.putExtra("distance",datas.get(position).get("distance"));
+                intent.putExtra("phone",datas.get(position-1).get("phone"));
+                intent.putExtra("addressname",datas.get(position-1).get("name"));
+                intent.putExtra("address",datas.get(position-1).get("address"));
+                intent.putExtra("distance",datas.get(position-1).get("distance"));
                 startActivity(intent);
 
             }
@@ -165,7 +166,7 @@ public class SerchActivity extends Activity {
         ArrayList<NameValuePair> getParams = new ArrayList<NameValuePair>();
         getParams.add(new BasicNameValuePair("access_token", "2.00O2b7ECTKvEwD8507bbee2fHNrTqD"));
         getParams.add(new BasicNameValuePair("coordinate", currentLocation.getLongitude() + "," + currentLocation.getLatitude()));
-        getParams.add(new BasicNameValuePair("range", "3000"));
+        getParams.add(new BasicNameValuePair("range", "5000"));
         getParams.add(new BasicNameValuePair("count", "10"));
         getParams.add(new BasicNameValuePair("page", load_Index + ""));
         getParams.add(new BasicNameValuePair("q", condition.getText().toString()));
@@ -253,6 +254,7 @@ public class SerchActivity extends Activity {
                 double latitude = poiJsonObject.optDouble("y");
                 String name = poiJsonObject.optString("name");
                 String address = poiJsonObject.optString("address");
+                String phone = poiJsonObject.optString("tel");
                 //封装每一个item的经纬度
                 locaton = new HashMap<String, Double>();
                 locaton.put("longitude",longitude);
@@ -267,6 +269,7 @@ public class SerchActivity extends Activity {
                     distanceStr = distance + "m";
                 }
                 item = new HashMap<String, String>();
+                item.put("phone",phone);
                 item.put("name", name);
                 item.put("address", address);
                 item.put("distance", distanceStr);

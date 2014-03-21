@@ -1,9 +1,13 @@
 package com.example.SerarchNearBy.view;
 
 import android.app.Activity;
+
 import android.graphics.drawable.Drawable;
+
 import android.os.Bundle;
+
 import android.util.Log;
+
 import android.view.View;
 import android.view.Window;
 import android.widget.*;
@@ -25,17 +29,22 @@ public class MapActivity extends Activity {
     private LocationClient locationClient;
     private MapController mapController;
     private MyLocationOverlay myLocationOverlay;
-    private PoiOverlay poiOverlay;
-    private PopupOverlay popupOverlay;
+
     private MKSearch search;//搜索服务类  通过该类可以实现各种各样的检索
     private int selectedPoiItemIndex;
     private BDLocation getCurrentLocation;
     private Double longitude, latitude;
-    private TextView textviewrootMessage, textviewaddressname, textviewaddressmessage;
-    private TextView textViewbyfoot, textViewbycar, textviewbybus;
-    private ImageButton seting_back, btpeople, btcar, btroot, btphone;
-    private String distance, addressname, address;
-
+    private TextView textviewphone, textviewrootMessage, textviewaddressname, textviewaddressmessage;
+    private ImageButton seting_back, btroot;
+    private Button btfoot, btbus, btcar;
+    private String distance;
+    private String addressname;
+    private String address;
+    private String phone;
+    private double time;
+    private String hour;
+    private final Double BUSSPEED = 12.76d, FOOTSPEED = 4.3d, CARSPEED = 30d;
+    private final int FOOT = 1, BUS = 2, CAR = 3;
 
     /**
      * Called when the activity is first created.
@@ -44,26 +53,23 @@ public class MapActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);//这个是取消title
-//注意：请在试用setContentView前初始化BMapManager对象，否则会报错
+        //注意：请在试用setContentView前初始化BMapManager对象，否则会报错
         setContentView(R.layout.mapview);
-
-
-//接受intent传值
+        //接受intent传值
         getIntentPamars();
-//初始化数据调用
+        //初始化数据调用
         init();
 
         mapView = (MapView) findViewById(R.id.bmapsView);
         mapView.setBuiltInZoomControls(true);
-//设置启用内置的缩放控件
+        //设置启用内置的缩放控件
         mapController = mapView.getController();
-// 得到mMapView的控制权,可以用它控制和驱动平移和缩放
+        // 得到mMapView的控制权,可以用它控制和驱动平移和缩放
         //      GeoPoint point = new GeoPoint((int) (34.918 * 1E6), (int) (108.404 * 1E6));
         //设置当前定位为中心点
-        //      GeoPoint point = new GeoPoint((int) (latitude * 1E6), (int) (longitude * 1E6));
-//用给定的经纬度构造一个GeoPoint，单位是微度 (度 * 1E6)
+        // 用给定的经纬度构造一个GeoPoint，单位是微度 (度 * 1E6)
         //     mapController.setCenter(point);//设置地图中心点
-        mapController.setZoom(16);
+        mapController.setZoom(12);
 
         locationClient = new LocationClient(this);
         locationClient.registerLocationListener(new BDLocationListener() {
@@ -95,10 +101,147 @@ public class MapActivity extends Activity {
         locateMe();
 
         serchpoi();
-        poiOverlay = new PoiOverlay(getResources().getDrawable(R.drawable.ic_loc_from),
-                mapView);
-        mapView.getOverlays().add(poiOverlay);
+        //绘画路线
+        onclickbtRoot(FOOT);
 
+    }
+
+    private String gettime(String distance, int style) {
+        double length = 0;
+        if (distance.contains("km")) {
+            length = Double.parseDouble(distance.substring(0, distance.length() - 2));
+        } else if (distance.contains("m")) {
+            length = Double.parseDouble(distance.substring(0, distance.length() - 1)) / 1000;
+        }
+        switch (style) {
+            case 1:
+                time = (length * 1 / FOOTSPEED);
+                break;
+            case 2:
+                time = (length * 1 / BUSSPEED);
+                break;
+            case 3:
+                time = (length * 1 / CARSPEED);
+                break;
+        }
+        hour = (int) (time * 60) + "";
+        if (time * 60 < 1) {
+            hour = "1";
+        }
+        return hour;
+    }
+
+    //接受Intent的传值
+    private void getIntentPamars() {
+        getCurrentLocation = getIntent().getParcelableExtra("currentLocation");
+        longitude = getIntent().getDoubleExtra("longitude", 0);
+        latitude = getIntent().getDoubleExtra("latitude", 0);
+        phone = getIntent().getStringExtra("phone");
+        addressname = getIntent().getStringExtra("addressname");
+        address = getIntent().getStringExtra("address");
+        distance = getIntent().getStringExtra("distance");
+    }
+
+    //初始化数据
+    private void init() {
+
+        textviewphone = (TextView) findViewById(R.id.textviewphone);
+
+
+        textviewrootMessage = (TextView) findViewById(R.id.textviewrootMessage);
+        textviewrootMessage.setTextColor(0xffff00ff);
+        //默认路线为步行
+        textviewrootMessage.setText("全程约" + distance + ",耗时约" + gettime(distance, FOOT) + "分钟");
+
+        textviewaddressmessage = (TextView) findViewById(R.id.textviewaddressmessage);
+        textviewaddressmessage.setText(address);
+
+        textviewaddressname = (TextView) findViewById(R.id.textviewaddressname);
+        textviewaddressname.setText(addressname);
+
+
+        seting_back = (ImageButton) findViewById(R.id.seting_back);
+        seting_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        btcar = (Button) findViewById(R.id.btcar);
+        btcar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RouteOverlay routeOverlay = new RouteOverlay(MapActivity.this, mapView);
+                //清除其他图层
+                if (routeOverlay != null) {
+                    mapView.getOverlays().remove(routeOverlay);
+                }
+                onclickbtRoot(CAR);
+                String str = gettime(distance, CAR);
+                btbus.setBackgroundResource(R.color.background);
+                btfoot.setBackgroundResource(R.color.background);
+                textviewrootMessage.setText("全程约" + distance + ",耗时约" + str + "分钟");
+                btcar.setBackgroundResource(R.drawable.bg_tab_top);
+            }
+        });
+
+        btbus = (Button) findViewById(R.id.btbus);
+        btbus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RouteOverlay routeOverlay = new RouteOverlay(MapActivity.this, mapView);
+                //清除其他图层
+                if (routeOverlay != null) {
+                    mapView.getOverlays().remove(routeOverlay);
+                }
+                onclickbtRoot(BUS);
+                String str = gettime(distance, BUS);
+                textviewrootMessage.setText("全程约" + distance + ",耗时约" + str + "分钟");
+                btcar.setBackgroundResource(R.color.background);
+                btfoot.setBackgroundResource(R.color.background);
+                btbus.setBackgroundResource(R.drawable.bg_tab_top);
+            }
+        });
+        btfoot = (Button) findViewById(R.id.btfoot);
+        btfoot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RouteOverlay routeOverlay = new RouteOverlay(MapActivity.this, mapView);
+                //清除其他图层
+                if (routeOverlay != null) {
+                    mapView.getOverlays().remove(routeOverlay);
+                }
+                onclickbtRoot(FOOT);
+                String str = gettime(distance, FOOT);
+                textviewrootMessage.setText("全程约" + distance + ",耗时约" + str + "分钟");
+                btcar.setBackgroundResource(R.color.background);
+                btbus.setBackgroundResource(R.color.background);
+                btfoot.setBackgroundResource(R.drawable.bg_tab_top);
+            }
+        });
+
+        btroot = (ImageButton) findViewById(R.id.btroot);
+        btroot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onclickbtRoot(FOOT);
+            }
+        });
+        //获取电话
+        getphone();
+
+    }
+
+    private void getphone() {
+        if ("".equals(phone)) {
+            textviewphone.setText("暂无电话");
+        } else {
+            textviewphone.setText(phone);
+        }
+    }
+
+    private void onclickbtRoot(int style) {
 
         GeoPoint startPoint = new GeoPoint((int) (getCurrentLocation.getLatitude() * 1E6),
                 (int) (getCurrentLocation.getLongitude() * 1E6));
@@ -109,12 +252,8 @@ public class MapActivity extends Activity {
                 (int) (longitude * 1E6));
         MKPlanNode endNode = new MKPlanNode();
         endNode.pt = endPoint;
-
         search = new MKSearch();
-
-        search.walkingSearch(null, startNode, null, endNode);
-
-
+        //事件监听
         search.init(MyApplication.getInstance().mBMapManager, new MKSearchListener() {
             @Override
             public void onGetPoiResult(MKPoiResult mkPoiResult, int i, int i2) {
@@ -123,19 +262,19 @@ public class MapActivity extends Activity {
 
             @Override
             public void onGetTransitRouteResult(MKTransitRouteResult mkTransitRouteResult, int i) {
-
+                displayTransit(mkTransitRouteResult, i);
             }
 
             @Override
             public void onGetDrivingRouteResult(MKDrivingRouteResult mkDrivingRouteResult, int i) {
-
+                displayDriving(mkDrivingRouteResult, i);
             }
 
             @Override
             public void onGetWalkingRouteResult(MKWalkingRouteResult mkWalkingRouteResult, int i) {
                 Log.d(getClass().getName(), "onGetWalkingRouteResult " + mkWalkingRouteResult);
 
-                displayRoute(mkWalkingRouteResult, i);
+                displayWalking(mkWalkingRouteResult, i);
 
 
             }
@@ -147,7 +286,12 @@ public class MapActivity extends Activity {
 
             @Override
             public void onGetBusDetailResult(MKBusLineResult mkBusLineResult, int i) {
-
+                if (i != 0 || mkBusLineResult == null) {
+                    RouteOverlay routeOverlay = new RouteOverlay(MapActivity.this, mapView);
+                    mapView.getOverlays().remove(routeOverlay);
+                    Toast.makeText(MapActivity.this, "抱歉，未找到结果", Toast.LENGTH_LONG).show();
+                    return;
+                }
             }
 
             @Override
@@ -165,79 +309,74 @@ public class MapActivity extends Activity {
 
             }
         });
+
+        //开始画路线
+        switch (style) {
+            case FOOT:
+                search.walkingSearch(getCurrentLocation.getCity(), startNode,
+                        getCurrentLocation.getCity(), endNode);
+                break;
+            case BUS:
+                search.transitSearch(getCurrentLocation.getCity(), startNode, endNode);
+                break;
+            case CAR:
+                search.drivingSearch(getCurrentLocation.getCity(), startNode,
+                        getCurrentLocation.getCity(), endNode);
+                break;
+        }
     }
 
-    //接受Intent的传值
-    private void getIntentPamars() {
-        getCurrentLocation = getIntent().getParcelableExtra("currentLocation");
-        longitude = getIntent().getDoubleExtra("longitude", 0);
-        latitude = getIntent().getDoubleExtra("latitude", 0);
-        addressname = getIntent().getStringExtra("addressname");
-        address = getIntent().getStringExtra("address");
-        distance = getIntent().getStringExtra("distance");
-    }
-
-    //初始化数据
-    private void init() {
-        View view = findViewById(R.id.ll_phone);
-        view.getBackground().setAlpha(50);
-        textviewrootMessage = (TextView) findViewById(R.id.textviewrootMessage);
-        textviewrootMessage.setTextColor(0xffff00ff);
-        textviewrootMessage.setText("全程约" + distance + ",");
-
-        textviewaddressmessage = (TextView) findViewById(R.id.textviewaddressmessage);
-        textviewaddressmessage.setText(address);
-
-        textviewaddressname = (TextView) findViewById(R.id.textviewaddressname);
-        textviewaddressname.setText(addressname);
-
-        textviewbybus = (TextView) findViewById(R.id.textviewbus);
-        textViewbycar = (TextView) findViewById(R.id.textviewbycar);
-        textViewbyfoot = (TextView) findViewById(R.id.textviewbyfoot);
-
-        seting_back = (ImageButton) findViewById(R.id.seting_back);
-        seting_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
-        btcar = (ImageButton) findViewById(R.id.btcar);
-        btcar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                textviewrootMessage.setText("全程约" + distance + ",");
-            }
-        });
-        btpeople = (ImageButton) findViewById(R.id.btpeople);
-        btphone = (ImageButton) findViewById(R.id.btphone);
-        btroot = (ImageButton) findViewById(R.id.btroot);
-    }
-
-    private void displayRoute(MKWalkingRouteResult mkWalkingRouteResult, int i) {
+    private void displayWalking(MKWalkingRouteResult mkWalkingRouteResult, int i) {
         RouteOverlay routeOverlay = new RouteOverlay(MapActivity.this, mapView);
+        //清除其他图层
         if (routeOverlay != null) {
             mapView.getOverlays().remove(routeOverlay);
         }
 
-        routeOverlay = new RouteOverlay(MapActivity.this, mapView);
-        // 此处仅展示一个方案作为示例
-        MKRoute route = mkWalkingRouteResult.getPlan(0).getRoute(0);
-        route.getArrayPoints();
         routeOverlay.setData(mkWalkingRouteResult.getPlan(0).getRoute(0));
-        //清除其他图层
-        //mMapView.getOverlays().clear();
 
-        //添加路线图层
         mapView.getOverlays().add(routeOverlay);
         //执行刷新使生效
         mapView.refresh();
         // 使用zoomToSpan()绽放地图，使路线能完全显示在地图上
         mapView.getController().zoomToSpan(routeOverlay.getLatSpanE6(), routeOverlay.getLonSpanE6());
-        //移动地图到起点
-        //mapView.getController().animateTo(res.getStart().pt);
+
+    }
+
+    private void displayDriving(MKDrivingRouteResult mkDrivingRouteResult, int i) {
+        RouteOverlay routeOverlay = new RouteOverlay(MapActivity.this, mapView);
+        //清除其他图层
+        if (routeOverlay != null) {
+            mapView.getOverlays().remove(routeOverlay);
+        }
+
+        routeOverlay.setData(mkDrivingRouteResult.getPlan(0).getRoute(0));
+
+        mapView.getOverlays().add(routeOverlay);
+        //执行刷新使生效
+        mapView.refresh();
+        // 使用zoomToSpan()绽放地图，使路线能完全显示在地图上
+        mapView.getController().zoomToSpan(routeOverlay.getLatSpanE6(), routeOverlay.getLonSpanE6());
+
+    }
+
+    private void displayTransit(MKTransitRouteResult mkTransitRouteResult, int i) {
+        RouteOverlay routeOverlay = new RouteOverlay(MapActivity.this, mapView);
+        //清除其他图层
+
+        if(routeOverlay != null){
+            Toast.makeText(MapActivity.this,"抱歉未找到路线",Toast.LENGTH_SHORT).show();
+            mapView.getOverlays().remove(routeOverlay);
+            return;
+        }
+        routeOverlay.setData(mkTransitRouteResult.getPlan(0).getRoute(0));
+
+        mapView.getOverlays().add(routeOverlay);
+        //执行刷新使生效
+        mapView.refresh();
+        // 使用zoomToSpan()绽放地图，使路线能完全显示在地图上
+        mapView.getController().zoomToSpan(routeOverlay.getLatSpanE6(), routeOverlay.getLonSpanE6());
+
     }
 
     private void locateMe() {
@@ -245,10 +384,7 @@ public class MapActivity extends Activity {
         if (!locationClient.isStarted()) {
             locationClient.start();
         }
-
-
         locationClient.requestLocation();
-
 
     }
 
@@ -258,7 +394,6 @@ public class MapActivity extends Activity {
 
         Log.d(getClass().getName(), "Current location, " + bdLocation.getLatitude() + " " + bdLocation.getLongitude());
 
-        setTitle(bdLocation.getAddrStr());
 
         //让地图中心点移动
         GeoPoint geoPoint = new GeoPoint((int) (bdLocation.getLatitude() * 1E6), (int) (bdLocation.getLongitude() * 1E6));
@@ -269,11 +404,12 @@ public class MapActivity extends Activity {
         if (myLocationOverlay != null) {
             mapView.getOverlays().remove(myLocationOverlay);
         }
-
+        Drawable mark = getResources().getDrawable(R.drawable.ic_current_loc);
         myLocationOverlay = new MyLocationOverlay(mapView);
         LocationData locationData = new LocationData();
         locationData.latitude = bdLocation.getLatitude();
         locationData.longitude = bdLocation.getLongitude();
+        myLocationOverlay.setMarker(mark);
         myLocationOverlay.setData(locationData);
 
         //添加图层
@@ -288,7 +424,7 @@ public class MapActivity extends Activity {
                 (int) (getCurrentLocation.getLongitude() * 1E6));
         GeoPoint endPoint = new GeoPoint((int) (latitude * 1E6),
                 (int) (longitude * 1E6));
-        Drawable mark = getResources().getDrawable(R.drawable.ic_current_loc);
+
         Drawable smark = getResources().getDrawable(R.drawable.ic_loc_from);
         Drawable emark = getResources().getDrawable(R.drawable.ic_loc_to);
 //用OverlayItem准备Overlay数据
@@ -298,9 +434,8 @@ public class MapActivity extends Activity {
         OverlayItem item2 = new OverlayItem(endPoint, "item2", "item2");
         item2.setMarker(emark);
         //创建IteminizedOverlay
-        PoiOverlay itemOverlay = new PoiOverlay(mark, mapView);
+        PoiOverlay itemOverlay = new PoiOverlay(smark, mapView);
         //将IteminizedOverlay添加到MapView中
-        // mapView.getOverlays().clear();
         mapView.getOverlays().add(itemOverlay);
         itemOverlay.addItem(item1);
         itemOverlay.addItem(item2);
@@ -338,14 +473,17 @@ public class MapActivity extends Activity {
 
         @Override
         public boolean onTap(GeoPoint geoPoint, MapView mapView) {
-            popupOverlay.hidePop();
-
+            Toast.makeText(MapActivity.this, "PoiOverlay onTap", Toast.LENGTH_SHORT).show();
             return super.onTap(geoPoint, mapView);
         }
 
         @Override
         protected boolean onTap(int i) {
             selectedPoiItemIndex = i;
+
+            Toast.makeText(MapActivity.this, "PoiOverlay onTap at " + i, Toast.LENGTH_SHORT).show();
+
+
             return super.onTap(i);
         }
     }
